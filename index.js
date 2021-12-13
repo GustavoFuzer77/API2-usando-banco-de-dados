@@ -6,20 +6,19 @@ const homeRoute = require('./src/routes/homeRoutes');
 const userRoute = require('./src/routes/userRoutes');
 const tokenRoute = require('./src/routes/tokenRoutes');
 const comidaRoute = require('./src/routes/comidaRoutes');
-const passport = require('./src/middlewares/passport')();
+const uploadRoute = require('./src/routes/photoRoutes');
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json());
-app.use(passport.initialize());
 
 
 
 
 
 
-
-app.use(comidaRoute)
-app.use(tokenRoute)
-app.use(userRoute)
-app.use(homeRoute)
+app.use(uploadRoute);
+app.use(comidaRoute);
+app.use(tokenRoute);
+app.use(userRoute);
+app.use(homeRoute);
 module.exports = app;

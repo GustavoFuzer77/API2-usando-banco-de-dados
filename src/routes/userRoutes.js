@@ -1,5 +1,4 @@
 const express = require('express');
-const passport = require('../middlewares/passport')();
 const route = express.Router();
 const userRoutes = require('../controllers/userController')
 const loginReq = require('../middlewares/loginJwt');
