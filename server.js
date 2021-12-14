@@ -1,5 +1,6 @@
 const app = require('./index')
+require('dotenv').config()
 
-app.listen(3001, () => {
+app.listen(process.env.LISTEN_PORT, () => {
     console.log('iniciado')
 })
