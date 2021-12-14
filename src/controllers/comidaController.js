@@ -20,6 +20,7 @@ exports.index = async (req, res) => {
       order: [['id', 'DESC'], [Foto, 'id', 'DESC']],
       include: {
         model: Foto,
+        attributes: ['url', 'filename']
       }
     })
     res.json(indexFood)
@@ -33,7 +34,14 @@ exports.index = async (req, res) => {
 exports.show = async (req, res) => {
   try {
     const { id } = req.params;
-    const showItem = await Comida.findByPk(id)
+    const showItem = await Comida.findByPk(id, {
+      attributes: ['id', 'nome', 'preco', 'descricao'],
+      order: [['id', 'DESC'], [Foto, 'id', 'DESC']],
+      include: {
+        model: Foto,
+        attributes: ['url', 'filename']
+      }
+    })
     if (!showItem) {
       res.status(404).json({
         errors: ['O ITEM não foi encontrado']

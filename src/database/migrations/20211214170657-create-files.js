@@ -17,7 +17,7 @@ module.exports = {
       },
       comida_id: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'comidas',
           key: 'id',
