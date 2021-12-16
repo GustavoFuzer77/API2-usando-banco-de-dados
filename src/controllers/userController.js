@@ -1,9 +1,16 @@
 const User = require('../models/User');
-
+const FotoUser = require('../models/UserFoto');
 
 exports.index = async (req, res) => {
   try{
-    const allUsers = await User.findAll({ attributes: ['id', 'nome', 'email', 'created_at']});
+    const allUsers = await User.findAll({ 
+      attributes: ['id', 'nome', 'email', 'created_at', 'descricao'],
+      order: [['id', 'DESC'], ],
+      include: {
+        model: FotoUser,
+        attributes: ['url', 'filename']
+      }
+    });
     res.json(allUsers)
   }catch(err){
     res.status(400)
@@ -27,9 +34,15 @@ exports.store = async (req, res) => {
 
 exports.show = async (req, res) => {
   try{
-    const showPerId = await User.findByPk(req.userId)
-    const { id, nome, email } = showPerId;
-    res.json({ id, nome, email })
+    const showPerId = await User.findByPk(req.userId, {
+      attributes: ['id', 'nome', 'email', 'idade', 'descricao'],
+      order: [['id', 'DESC'],[FotoUser, 'id', 'DESC']],
+      include: {
+        model: FotoUser,
+        attributes: ['url', 'filename']
+      }
+    })
+    res.json(showPerId)
   }catch(err){
     res.status(404)
     res.json({

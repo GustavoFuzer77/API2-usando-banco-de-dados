@@ -1,5 +1,6 @@
+require('dotenv').config()
 const User = require("../models/User");
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 exports.store = async (req, res) => {
   const { email = '', password = '' } = req.body;
@@ -19,11 +20,8 @@ exports.store = async (req, res) => {
       errors: ['Senha inválida.']
     })
   }
-  const payload = {
-    id: user.id,
-    nome: user.nome,
-    email: user.email
-  }
-  const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '3d' });
-  res.json({ token })
+
+  const { id, nome, idade } = user;
+  const token = jwt.sign({ id, email, nome, idade }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRE });
+  return res.json({ token })
 }

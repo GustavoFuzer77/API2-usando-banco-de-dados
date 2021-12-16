@@ -37,6 +37,16 @@ module.exports = class User extends Model {
           }
         }
       },
+      descricao: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+        validate: {
+          len: {
+            args: [15, 500],
+            msg: 'A descrição deve ter entre 15 a 500 caracteres'
+          }
+        }
+      },
       password_hash: {
         type: Sequelize.STRING,
         defaultValue: '',
@@ -61,6 +71,10 @@ module.exports = class User extends Model {
     })
 
     return this;
+  }
+
+  static associate(models) {
+    this.hasMany(models.FotoUser, { foreignKey: 'user_id' })
   }
 
   passwordIsValid(password){

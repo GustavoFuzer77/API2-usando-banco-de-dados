@@ -1,23 +1,29 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('comidas', {
+    await queryInterface.createTable('fotosUsers', { 
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
       },
-      nome: {
+      originalname: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      descricao: {
+      filename: {
         type: Sequelize.STRING,
-        allowNull: true,
-      },
-      preco: {
-        type: Sequelize.FLOAT,
         allowNull: false
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       created_at: {
         type: Sequelize.DATE,
@@ -31,6 +37,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('comidas');
+    await queryInterface.dropTable('fotosUsers');
   }
 };
