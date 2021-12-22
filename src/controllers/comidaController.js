@@ -1,11 +1,23 @@
 const express = require('express');
 const Comida = require('../models/Comida');
+const User = require('../models/User');
 const Foto = require('../models/FotoComida');
 
 exports.store = async (req, res) => {
   try {
-    const newFood = await Comida.create(req.body)
-    res.json(newFood)
+    const user_id = req.userId;
+    const { nome, preco, descricao } = req.body;
+    console.log(user_id)
+
+    const user = await User.findByPk(user_id);
+    if (!user) {
+      return res.status(400).json({
+        errors: ['usuário não encontrado.']
+      })
+
+    }
+    const newFood = await Comida.create({ nome, preco, descricao, user_id })
+    return res.json(newFood)
   } catch (err) {
     res.status(400).json({
       errors: err.errors.map((erro) => erro.message)
@@ -16,7 +28,7 @@ exports.store = async (req, res) => {
 exports.index = async (req, res) => {
   try {
     const indexFood = await Comida.findAll({
-      attributes: ['id', 'nome', 'preco', 'descricao'],
+      attributes: ['id', 'nome', 'preco', 'descricao', 'user_id'],
       order: [['id', 'DESC'], [Foto, 'id', 'DESC']],
       include: {
         model: Foto,
@@ -33,21 +45,18 @@ exports.index = async (req, res) => {
 
 exports.show = async (req, res) => {
   try {
-    const { id } = req.params;
-    const showItem = await Comida.findByPk(id, {
-      attributes: ['id', 'nome', 'preco', 'descricao'],
-      order: [['id', 'DESC'], [Foto, 'id', 'DESC']],
-      include: {
-        model: Foto,
-        attributes: ['url', 'filename']
-      }
+    const user_id = req.userId;
+
+    const user = await User.findByPk(user_id, {
+      include: { association: 'comidas', attributes: ['id', 'nome', 'descricao', 'preco'] }
     })
-    if (!showItem) {
-      res.status(404).json({
-        errors: ['O ITEM não foi encontrado']
+
+    if (!user) {
+      return res.status(400).json({
+        errors: ['usuário não encontrado.']
       })
     }
-    res.json(showItem)
+    res.json(user.comidas)
   } catch (err) {
     res.status(404).json({
       errors: ['O ITEM não foi encontrado']

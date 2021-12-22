@@ -40,6 +40,7 @@ module.exports = class Comida extends Model {
 
   static associate(models) {
     this.hasMany(models.Foto, { foreignKey: 'comida_id' })
+    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'comidaDoUsuario' })
   }
 
 }

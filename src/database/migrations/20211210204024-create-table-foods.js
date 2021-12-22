@@ -19,6 +19,11 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: false
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: { model: 'users', key: 'id' }
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false

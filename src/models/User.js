@@ -1,4 +1,4 @@
-const { Sequelize ,Model } = require('sequelize');
+const { Sequelize, Model } = require('sequelize');
 const bcrypt = require('bcryptjs')
 
 module.exports = class User extends Model {
@@ -32,7 +32,7 @@ module.exports = class User extends Model {
         validate: {
           isNumeric: {
             msg: 'A idade deve ser um numero.'
-          },isInt:{
+          }, isInt: {
             msg: 'A idade deve ser um numero inteiro.'
           }
         }
@@ -66,8 +66,8 @@ module.exports = class User extends Model {
     })
 
     this.addHook('beforeSave', async (user) => {
-      if(user.password)
-      user.password_hash = await bcrypt.hash(user.password, 8)
+      if (user.password)
+        user.password_hash = await bcrypt.hash(user.password, 8)
     })
 
     return this;
@@ -75,9 +75,10 @@ module.exports = class User extends Model {
 
   static associate(models) {
     this.hasMany(models.FotoUser, { foreignKey: 'user_id' })
+    this.hasMany(models.Comida, { foreignKey: 'user_id', as: 'comidas'})
   }
 
-  passwordIsValid(password){
+  passwordIsValid(password) {
     return bcrypt.compare(password, this.password_hash)
   }
 
