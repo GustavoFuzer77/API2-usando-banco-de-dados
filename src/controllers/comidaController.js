@@ -7,7 +7,6 @@ exports.store = async (req, res) => {
   try {
     const user_id = req.userId;
     const { nome, preco, descricao } = req.body;
-    console.log(user_id)
 
     const user = await User.findByPk(user_id);
     if (!user) {
@@ -48,7 +47,11 @@ exports.show = async (req, res) => {
     const user_id = req.userId;
 
     const user = await User.findByPk(user_id, {
-      include: { association: 'comidas', attributes: ['id', 'nome', 'descricao', 'preco'] }
+      include: {
+        association: 'comidas', attributes: ['id', 'nome', 'descricao', 'preco'],
+        include: { model: Foto, attributes: ['url', 'filename'] }
+      },
+
     })
 
     if (!user) {

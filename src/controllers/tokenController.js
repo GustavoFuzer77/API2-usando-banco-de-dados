@@ -21,7 +21,7 @@ exports.store = async (req, res) => {
     })
   }
 
-  const { id, nome, idade } = user;
-  const token = jwt.sign({ id, email, nome, idade }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRE });
+  const { id, nome, idade, descricao } = user;
+  const token = jwt.sign({ id, email, nome, idade, descricao }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRE });
   return res.json({ token })
 }
